@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sword Art Online | Database</title>
+  
+  <!-- Fuentes modernas estilo tech/gamer -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-main: #06090e;
+      --card-bg: rgba(14, 21, 33, 0.75);
+      --accent-cyan: #00f0ff;
+      --accent-orange: #ff9f1c;
+      --text-muted: #94a3b8;
+      --border-glow: rgba(0, 240, 255, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: #f8fafc;
+      font-family: 'Rajdhani', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0, 240, 255, 0.15), transparent),
+        radial-gradient(ellipse 60% 40% at 50% 120%, rgba(255, 159, 28, 0.08), transparent);
+    }
+
+    /* BARRA DE NAVEGACIÓN */
+    header.navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 5%;
+      background: rgba(6, 9, 14, 0.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border-glow);
+    }
+
+    .logo {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: 1.4rem;
+      letter-spacing: 3px;
+      color: #fff;
+    }
+
+    .logo span {
+      color: var(--accent-cyan);
+      text-shadow: 0 0 12px var(--accent-cyan);
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 1rem;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 4px;
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      padding: 0.6rem 1.6rem;
+      border-radius: 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .nav-btn:hover {
+      color: #fff;
+    }
+
+    .nav-btn.active {
+      background: var(--accent-cyan);
+      color: #030712;
+      box-shadow: 0 0 16px rgba(0, 240, 255, 0.4);
+    }
+
+    /* CONTENEDOR DE VISTAS */
+    main.view-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 3rem 2rem 5rem;
+    }
+
+    .view-section {
+      display: none;
+      animation: fadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .view-section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ESTILOS DE LA VISTA: HISTORIA */
+    .hero-banner {
+      background: linear-gradient(180deg, rgba(14, 21, 33, 0.6), rgba(6, 9, 14, 0.95)),
+                  url('https://images4.alphacoders.com/605/thumb-1920-605584.jpg') center/cover;
+      border: 1px solid var(--border-glow);
+      border-radius: 16px;
+      padding: 4.5rem 3rem;
+      position: relative;
+      margin-bottom: 3.5rem;
+      overflow: hidden;
+    }
+
+    .hero-tag {
+      color: var(--accent-cyan);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+      display: inline-block;
+    }
+
+    .hero-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.8rem;
+      font-weight: 900;
+      margin-bottom: 1.2rem;
+      line-height: 1.15;
+    }
+
+    .hero-desc {
+      font-size: 1.15rem;
+      max-width: 750px;
+      color: #cbd5e1;
+      line-height: 1.7;
+    }
+
+    .timeline-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.8rem;
+    }
+
+    .arc-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 2rem;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .arc-card:hover {
+      border-color: var(--accent-cyan);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(0, 240, 255, 0.1);
+    }
+
+    .arc-year {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.8rem;
+      color: var(--accent-orange);
+      letter-spacing: 2px;
+      margin-bottom: 0.5rem;
+    }
+
+    .arc-card h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.35rem;
+      margin-bottom: 0.8rem;
+      color: #fff;
+    }
+
+    .arc-card p {
+      color: var(--text-muted);
+      line-height: 1.6;
+      font-size: 1rem;
+    }
+
+    /* ESTILOS DE LA VISTA: PERSONAJES */
+    .section-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .section-header h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.4rem;
+      letter-spacing: 3px;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-header p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      letter-spacing: 1px;
+    }
+
+    .characters-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 2rem;
+    }
+
+    .char-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.35s cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .char-card:hover {
+      border-color: var(--accent-cyan);
+      transform: translateY(-8px);
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 240, 255, 0.18);
+    }
+
+    .char-img-wrap {
+      width: 100%;
+      height: 340px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .char-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      transition: transform 0.5s ease;
+    }
+
+    .char-card:hover .char-img-wrap img {
+      transform: scale(1.06);
+    }
+
+    .char-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: rgba(6, 9, 14, 0.85);
+      border: 1px solid var(--accent-cyan);
+      color: var(--accent-cyan);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .char-details {
+      padding: 1.8rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      justify-content: space-between;
+    }
+
+    .char-details h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.5rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .char-role {
+      color: var(--accent-orange);
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+
+    .char-lore {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.55;
+      margin-bottom: 1.5rem;
+    }
+
+    .char-meta {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 1rem;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+    }
+
+    .char-meta span {
+      color: var(--text-muted);
+    }
+
+    .char-meta strong {
+      color: #fff;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      header.navbar {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .hero-title {
+        font-size: 2rem;
+      }
+      .hero-banner {
+        padding: 2.5rem 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BARRA DE NAVEGACIÓN -->
+  <header class="navbar">
+    <div class="logo">SAO<span>//</span>SYSTEM</div>
+    
+    <nav class="nav-tabs">
+      <button class="nav-btn active" onclick="switchView('story')">HISTORIA</button>
+      <button class="nav-btn" onclick="switchView('characters')">PERSONAJES</button>
+    </nav>
+  </header>
+
+  <main class="view-container">
+
+    <!-- ================= VIEW 1: HISTORIA ================= -->
+    <section id="view-story" class="view-section active">
+      <div class="hero-banner">
+        <span class="hero-tag">Incidente Aincrad &bull; 2022</span>
+        <h1 class="hero-title">El Castillo Flotante de la Muerte</h1>
+        <p class="hero-desc">
+          10,000 jugadores quedaron atrapados en un juego de realidad virtual masivo gracias a la tecnología NerveGear. La única forma de escapar: superar los 100 pisos del castillo de Aincrad. Si tu barra de vida llega a cero en el juego, mueres en la vida real.
+        </p>
+      </div>
+
+      <div class="timeline-grid">
+        <article class="arc-card">
+          <div class="arc-year">ARCO 01</div>
+          <h3>Aincrad</h3>
+          <p>El origen del fenómeno SAO. Los jugadores deben organizarse en gremios y líneas de frente para derrotar a los jefes de piso y recuperar su libertad.</p>
+        </article>
+
+        <article class="arc-card">
+          <div class="arc-year">ARCO 02</div>
+          <h3>Gun Gale Online</h3>
+          <p>Un mundo post-apocalíptico de armas de fuego donde surge 'Death Gun', un asesino misterioso capaz de arrebatar vidas en el mundo real desde el juego.</p>
+        </article>
+
+        <article class="arc-card">
+          <div class="arc-year">ARCO 03</div>
+          <h3>Project Alicization</h3>
+          <p>Kirito despierta en Underworld, una simulación militar hiperrealista donde conviven inteligencias artificiales con almas humanas llamadas Fluctlights.</p>
+        </article>
+      </div>
+    </section>
+
+<!-- ================= VIEW 2: PERSONAJES ================= -->
+    <section id="view-characters" class="view-section">
+      <div class="section-header">
+        <h2>AVATARES PRINCIPALES</h2>
+        <p>Base de datos de combatientes registrados en el sistema</p>
+      </div>
+
+      <div class="characters-grid">
+
+        <!-- 1. KIRITO -->
+        <div class="char-card">
+          <div class="char-img-wrap">
+            <span class="char-badge">DPS / Solo</span>
+            <img 
+              src="img/kirito.jpg" 
+              alt="Kirito" 
+              referrerpolicy="no-referrer"
+            />
+          </div>
+          <div class="char-details">
+            <div>
+              <h3>Kirito</h3>
+              <div class="char-role">El Espadachín Negro</div>
+              <p class="char-lore">Jugador solitario de élite que liberó Aincrad. Experto en combate cuerpo a cuerpo y único portador de la técnica de Doble Empuñadura.</p>
+            </div>
+            <div class="char-meta">
+              <span>Armas:</span>
+              <strong>Elucidator / Dark Repulser</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. ASUNA -->
+        <div class="char-card">
+          <div class="char-img-wrap">
+            <span class="char-badge">Líder de Asalto</span>
+            <img 
+              src="img/asuna.jpg" 
+              alt="Asuna" 
+              referrerpolicy="no-referrer"
+            />
+          </div>
+          <div class="char-details">
+            <div>
+              <h3>Asuna</h3>
+              <div class="char-role">Destello Veloz (The Flash)</div>
+              <p class="char-lore">Sublíder de los Caballeros del Juramento de Sangre. Reconocida por su velocidad casi sobrehumana con el estoque en combate de vanguardia.</p>
+            </div>
+            <div class="char-meta">
+              <span>Arma:</span>
+              <strong>Lambent Light</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. SINON -->
+        <div class="char-card">
+          <div class="char-img-wrap">
+            <span class="char-badge">Francotirador</span>
+            <img 
+              src="img/sinon.jpg" 
+              alt="Sinon" 
+              referrerpolicy="no-referrer"
+            />
+          </div>
+          <div class="char-details">
+            <div>
+              <h3>Sinon</h3>
+              <div class="char-role">Tiradora Élite de GGO</div>
+              <p class="char-lore">Una francotiradora letal en Gun Gale Online con una precisión inigualable a kilómetros de distancia, armada con un rifle antimaterial.</p>
+            </div>
+            <div class="char-meta">
+              <span>Arma:</span>
+              <strong>PGM Ultima Ratio Hecate II</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. EUGEO -->
+        <div class="char-card">
+          <div class="char-img-wrap">
+            <span class="char-badge">Caballero</span>
+            <img 
+              src="img/eugeo.jpg" 
+              alt="Eugeo" 
+              referrerpolicy="no-referrer"
+            />
+          </div>
+          <div class="char-details">
+            <div>
+              <h3>Eugeo</h3>
+              <div class="char-role">Espadachín de Underworld</div>
+              <p class="char-lore">El leal compañero de armas de Kirito en la Catedral Central. Capaz de desatar artes sagradas que congelan todo a su alrededor.</p>
+            </div>
+            <div class="char-meta">
+              <span>Arma:</span>
+              <strong>Blue Rose Sword</strong>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Cambio interactivo entre las 2 views
+    function switchView(viewName) {
+      // 1. Ocultar todas las vistas y remover estado activo
+      document.querySelectorAll('.view-section').forEach(view => {
+        view.classList.remove('active');
+      });
+
+      // 2. Remover estado activo de los botones de navegación
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+
+      // 3. Activar la vista seleccionada
+      const targetView = document.getElementById(`view-${viewName}`);
+      if (targetView) {
+        targetView.classList.add('active');
+      }
+
+      // 4. Activar el botón correspondiente
+      const activeBtn = Array.from(document.querySelectorAll('.nav-btn')).find(btn => 
+        btn.getAttribute('onclick').includes(viewName)
+      );
+      if (activeBtn) {
+        activeBtn.classList.add('active');
+      }
+    }
+  </script>
+</body>
+</html>
