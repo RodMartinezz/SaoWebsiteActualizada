@@ -3,34 +3,48 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sword Art Online | Main Site</title>
+  <title>Sword Art Online | Main Site & AI System</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg-main: #06090e;
-      --card-bg: rgba(14, 21, 33, 0.78);
+      --bg-main: #05070a;
+      --card-bg: rgba(10, 15, 24, 0.6);
       --accent-cyan: #00f0ff;
+      --accent-cyan-glow: rgba(0, 240, 255, 0.4);
       --accent-orange: #ff9f1c;
-      --text-muted: #94a3b8;
-      --border-glow: rgba(0, 240, 255, 0.25);
+      --accent-orange-glow: rgba(255, 159, 28, 0.4);
+      --text-main: #e2e8f0;
+      --text-muted: #8b9bb4;
+      --border-color: rgba(0, 240, 255, 0.15);
+      --chat-bg: rgba(4, 7, 12, 0.9);
+      --cyber-grid: rgba(0, 240, 255, 0.03);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       background-color: var(--bg-main);
-      color: #f8fafc;
+      color: var(--text-main);
       font-family: 'Rajdhani', sans-serif;
       min-height: 100vh;
       overflow-x: hidden;
+      /* Fondo de cuadrícula ciberpunk */
       background-image: 
-        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0, 240, 255, 0.15), transparent),
-        radial-gradient(ellipse 60% 40% at 50% 120%, rgba(255, 159, 28, 0.08), transparent);
+        linear-gradient(var(--cyber-grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--cyber-grid) 1px, transparent 1px),
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0, 240, 255, 0.1), transparent),
+        radial-gradient(ellipse 60% 40% at 50% 120%, rgba(255, 159, 28, 0.05), transparent);
+      background-size: 30px 30px, 30px 30px, 100% 100%, 100% 100%;
+      background-position: center top;
     }
+
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-main); }
+    ::-webkit-scrollbar-thumb { background: var(--accent-cyan); border-radius: 4px; }
 
     header.navbar {
       position: sticky;
@@ -39,172 +53,210 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1.2rem 5%;
-      background: rgba(6, 9, 14, 0.88);
-      backdrop-filter: blur(14px);
-      border-bottom: 1px solid var(--border-glow);
+      padding: 1rem 5%;
+      background: rgba(5, 7, 10, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-color);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
     }
 
     .logo {
       font-family: 'Orbitron', sans-serif;
       font-weight: 900;
-      font-size: 1.4rem;
-      letter-spacing: 3px;
+      font-size: 1.6rem;
+      letter-spacing: 4px;
       color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .logo span {
       color: var(--accent-cyan);
-      text-shadow: 0 0 12px var(--accent-cyan);
+      text-shadow: 0 0 15px var(--accent-cyan);
     }
 
     .nav-tabs {
       display: flex;
-      gap: 1rem;
-      background: rgba(255, 255, 255, 0.03);
-      padding: 4px;
-      border-radius: 30px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      gap: 0.8rem;
+      background: rgba(255, 255, 255, 0.02);
+      padding: 6px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .nav-btn {
       background: transparent;
-      border: none;
+      border: 1px solid transparent;
       color: var(--text-muted);
       font-family: 'Orbitron', sans-serif;
       font-size: 0.85rem;
       font-weight: 700;
-      letter-spacing: 2px;
-      padding: 0.6rem 1.6rem;
-      border-radius: 24px;
+      letter-spacing: 1.5px;
+      padding: 0.6rem 1.5rem;
+      border-radius: 4px;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
     }
 
-    .nav-btn:hover { color: #fff; }
+    .nav-btn::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%; width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.2), transparent);
+      transition: 0.4s;
+    }
+
+    .nav-btn:hover::before { left: 100%; }
+    .nav-btn:hover { color: #fff; border-color: rgba(0, 240, 255, 0.3); }
+    
     .nav-btn.active {
-      background: var(--accent-cyan);
-      color: #030712;
-      box-shadow: 0 0 16px rgba(0, 240, 255, 0.4);
+      background: rgba(0, 240, 255, 0.1);
+      color: var(--accent-cyan);
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 15px var(--accent-cyan-glow) inset, 0 0 10px var(--accent-cyan-glow);
     }
 
     main.view-container {
-      max-width: 1280px;
+      max-width: 1300px;
       margin: 0 auto;
       padding: 3rem 2rem 5rem;
     }
 
     .view-section {
       display: none;
-      animation: fadeIn 0.4s forwards;
+      animation: glitchFade 0.5s forwards;
     }
-
     .view-section.active { display: block; }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(15px); }
-      to { opacity: 1; transform: translateY(0); }
+    @keyframes glitchFade {
+      0% { opacity: 0; transform: translateY(20px) scale(0.98); filter: hue-rotate(90deg); }
+      100% { opacity: 1; transform: translateY(0) scale(1); filter: hue-rotate(0); }
     }
 
-    /* HISTORIA */
     .hero-banner {
-      background: linear-gradient(180deg, rgba(14, 21, 33, 0.6), rgba(6, 9, 14, 0.95)),
+      background: linear-gradient(180deg, rgba(5, 7, 10, 0.4), rgba(5, 7, 10, 0.95)),
                   url('https://images4.alphacoders.com/605/thumb-1920-605584.jpg') center/cover;
-      border: 1px solid var(--border-glow);
-      border-radius: 16px;
-      padding: 4.5rem 3rem;
-      margin-bottom: 3.5rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 5rem 4rem;
+      margin-bottom: 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-banner::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; width: 100%; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
     }
 
     .hero-tag {
-      color: var(--accent-cyan);
+      color: var(--accent-orange);
       font-family: 'Orbitron', sans-serif;
-      font-size: 0.85rem;
-      letter-spacing: 3px;
-      margin-bottom: 0.8rem;
+      font-size: 0.9rem;
+      letter-spacing: 4px;
+      margin-bottom: 1rem;
       display: inline-block;
+      text-shadow: 0 0 10px var(--accent-orange-glow);
+      background: rgba(255, 159, 28, 0.1);
+      padding: 4px 12px;
+      border-left: 3px solid var(--accent-orange);
     }
 
     .hero-title {
       font-family: 'Orbitron', sans-serif;
-      font-size: 2.8rem;
+      font-size: 3.5rem;
       font-weight: 900;
-      margin-bottom: 1.2rem;
-    }
-
-    .hero-desc {
-      font-size: 1.15rem;
-      max-width: 750px;
-      color: #cbd5e1;
-      line-height: 1.7;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      line-height: 1.1;
+      text-shadow: 0 0 20px rgba(0,0,0,0.8);
     }
 
     .timeline-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 1.8rem;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
     }
 
     .arc-card {
       background: var(--card-bg);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 12px;
-      padding: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 2.5rem 2rem;
+      transition: all 0.4s ease;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .arc-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: radial-gradient(circle at top right, rgba(0, 240, 255, 0.1), transparent 50%);
+      opacity: 0; transition: 0.4s; z-index: -1;
     }
 
-    .arc-year {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.8rem;
-      color: var(--accent-orange);
-      margin-bottom: 0.5rem;
+    .arc-card:hover {
+      border-color: var(--accent-cyan);
+      transform: translateY(-8px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6), 0 0 20px var(--accent-cyan-glow);
     }
+    .arc-card:hover::before { opacity: 1; }
 
-    .arc-card h3 {
-      font-family: 'Orbitron', sans-serif;
-      margin-bottom: 0.8rem;
-    }
-
-    .arc-card p { color: var(--text-muted); line-height: 1.6; }
-
-    /* PERSONAJES */
     .section-header {
       text-align: center;
-      margin-bottom: 3rem;
+      margin-bottom: 4rem;
     }
 
     .section-header h2 {
       font-family: 'Orbitron', sans-serif;
-      font-size: 2.4rem;
-      letter-spacing: 3px;
-      margin-bottom: 0.5rem;
+      font-size: 2.8rem;
+      letter-spacing: 4px;
+      margin-bottom: 0.8rem;
+      text-transform: uppercase;
+      color: #fff;
+      text-shadow: 0 0 15px var(--accent-cyan-glow);
+    }
+    
+    .section-header p {
+      color: var(--accent-cyan);
+      font-family: 'Orbitron', sans-serif;
+      letter-spacing: 2px;
+      font-size: 0.9rem;
     }
 
     .characters-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 2rem;
-      margin-bottom: 4rem;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2.5rem;
     }
 
     .char-card {
       background: var(--card-bg);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      transition: all 0.3s ease;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      backdrop-filter: blur(5px);
     }
 
     .char-card:hover {
       border-color: var(--accent-cyan);
-      transform: translateY(-6px);
+      transform: translateY(-12px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 25px var(--accent-cyan-glow);
     }
 
     .char-img-wrap {
       width: 100%;
-      height: 320px;
-      background: #03060a;
+      height: 350px;
+      background: #000;
       overflow: hidden;
       position: relative;
     }
@@ -214,71 +266,197 @@
       height: 100%;
       object-fit: cover;
       object-position: top center;
+      transition: transform 0.6s ease;
+      opacity: 0.9;
+    }
+
+    .char-card:hover .char-img-wrap img {
+      transform: scale(1.1);
+      opacity: 1;
+    }
+
+    .char-img-wrap::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; width: 100%; height: 40%;
+      background: linear-gradient(0deg, var(--card-bg) 0%, transparent 100%);
     }
 
     .char-badge {
       position: absolute;
-      top: 12px;
-      right: 12px;
-      background: rgba(6, 9, 14, 0.85);
+      top: 15px;
+      right: 15px;
+      background: rgba(0, 0, 0, 0.8);
       border: 1px solid var(--accent-cyan);
       color: var(--accent-cyan);
-      padding: 3px 8px;
-      border-radius: 12px;
-      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.7rem;
       font-weight: 700;
+      letter-spacing: 1px;
+      z-index: 2;
+      box-shadow: 0 0 10px var(--accent-cyan-glow);
     }
 
     .char-details {
-      padding: 1.5rem;
+      padding: 1.8rem;
       display: flex;
       flex-direction: column;
       flex: 1;
       justify-content: space-between;
+      position: relative;
+      z-index: 2;
     }
 
     .char-details h3 {
       font-family: 'Orbitron', sans-serif;
-      margin-bottom: 0.2rem;
+      font-size: 1.6rem;
+      color: #fff;
+      margin-bottom: 0.3rem;
     }
 
     .char-role {
       color: var(--accent-orange);
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       font-weight: 600;
-      margin-bottom: 0.8rem;
+      letter-spacing: 1px;
+      margin-bottom: 1.2rem;
+      text-transform: uppercase;
     }
 
     .char-lore {
       color: var(--text-muted);
-      font-size: 0.9rem;
-      line-height: 1.5;
-      margin-bottom: 1rem;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
     }
 
     .char-meta {
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      padding-top: 0.8rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 1.2rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+    }
+    
+    .char-meta strong { 
+      color: var(--accent-cyan); 
+      margin-left: 8px;
+      font-family: 'Orbitron', sans-serif;
       font-size: 0.85rem;
     }
 
-    /* CONTENEDOR IFRAME DE STREAMLIT */
-    .streamlit-wrapper {
-      background: rgba(10, 16, 26, 0.95);
-      border: 1px solid var(--border-glow);
-      border-radius: 20px;
-      padding: 1.5rem;
-      box-shadow: 0 0 35px rgba(0, 0, 0, 0.8);
-      overflow: hidden;
+    .analysis-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
     }
 
+    @media (min-width: 1024px) {
+      .analysis-layout {
+        grid-template-columns: 350px 1fr; /* Chat a la izquierda, Dashboard a la derecha */
+      }
+    }
+
+    /* Terminal UI para Chat y Streamlit */
+    .cyber-terminal {
+      background: var(--chat-bg);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(0, 240, 255, 0.05);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .terminal-header {
+      background: rgba(10, 15, 24, 0.95);
+      padding: 0.8rem 1.2rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .term-dots { display: flex; gap: 6px; }
+    .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .dot.red { background: #ff5f56; }
+    .dot.yellow { background: #ffbd2e; }
+    .dot.green { background: #27c93f; }
+
+    .term-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+      flex: 1;
+      text-align: center;
+    }
+
+    /* CHAT YUI */
+    .ai-container { height: 700px; }
+    .chat-messages {
+      flex: 1; padding: 1.5rem; overflow-y: auto;
+      display: flex; flex-direction: column; gap: 1.2rem;
+    }
+    .message {
+      max-width: 85%; padding: 1rem 1.2rem; border-radius: 6px;
+      line-height: 1.5; font-size: 0.95rem; position: relative;
+    }
+    .msg-user {
+      align-self: flex-end;
+      background: rgba(0, 240, 255, 0.1);
+      border-right: 3px solid var(--accent-cyan);
+      color: #fff;
+    }
+    .msg-ai {
+      align-self: flex-start;
+      background: rgba(255, 159, 28, 0.1);
+      border-left: 3px solid var(--accent-orange);
+      color: #fff;
+    }
+    .chat-input-area {
+      padding: 1.2rem; background: rgba(5, 7, 10, 0.9);
+      border-top: 1px solid rgba(255, 255, 255, 0.05); display: flex; gap: 0.8rem;
+    }
+    .chat-input {
+      flex: 1; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff; padding: 0.8rem 1.2rem; border-radius: 4px; font-family: 'Rajdhani', sans-serif;
+      outline: none; transition: 0.3s;
+    }
+    .chat-input:focus { border-color: var(--accent-cyan); background: rgba(0, 240, 255, 0.05); }
+    .chat-send-btn {
+      background: var(--accent-cyan); color: #000; border: none; padding: 0 1.5rem;
+      border-radius: 4px; font-family: 'Orbitron', sans-serif; font-weight: 700;
+      cursor: pointer; transition: 0.3s; text-transform: uppercase;
+    }
+    .chat-send-btn:hover { background: #fff; box-shadow: 0 0 15px var(--accent-cyan); }
+    .typing-indicator { display: none; align-self: flex-start; color: var(--accent-cyan); font-family: 'Orbitron', sans-serif; font-size: 0.8rem; padding: 0 1rem; animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+    /* STREAMLIT IFRAME WRAPPER */
+    .streamlit-wrapper {
+      height: 1100px;
+      position: relative;
+    }
+    
     .streamlit-wrapper iframe {
-  width: 100%;
-  height: 1100px; /* <--- Aumenta este valor (antes 780px) */
-  border: none;
-  border-radius: 12px;
-  background-color: transparent;
-}
+      width: 100%; height: 100%; border: none; background-color: transparent;
+      position: relative; z-index: 5;
+    }
+
+    .offline-help {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      text-align: center; width: 80%; max-width: 500px;
+      padding: 3rem; background: rgba(10, 15, 24, 0.8); border: 1px dashed var(--accent-orange);
+      border-radius: 8px; z-index: 1;
+    }
+    .offline-help h4 { color: var(--accent-orange); font-family: 'Orbitron', sans-serif; margin-bottom: 1rem; font-size: 1.2rem; }
+    .offline-help p { color: var(--text-muted); margin-bottom: 1rem; }
+    .offline-help code { background: rgba(0,0,0,0.5); padding: 4px 8px; border-radius: 4px; color: var(--accent-cyan); font-family: monospace; }
   </style>
 </head>
 <body>
@@ -286,130 +464,337 @@
   <header class="navbar">
     <div class="logo">SAO<span>//</span>SYSTEM</div>
     <nav class="nav-tabs">
-      <button class="nav-btn" onclick="switchView('story')">HISTORIA</button>
-      <button class="nav-btn active" onclick="switchView('characters')">PERSONAJES</button>
+      <button class="nav-btn active" onclick="switchView('story')">HISTORIA</button>
+      <button class="nav-btn" onclick="switchView('characters')">PERSONAJES</button>
+      <button class="nav-btn" onclick="switchView('analysis')">IA & ANÁLISIS</button>
     </nav>
   </header>
 
   <main class="view-container">
 
-    <!-- VIEW 1: HISTORIA -->
-    <section id="view-story" class="view-section">
+    <section id="view-story" class="view-section active">
       <div class="hero-banner">
-        <span class="hero-tag">Incidente Aincrad &bull; 2022</span>
-        <h1 class="hero-title">El Castillo Flotante de la Muerte</h1>
-        <p class="hero-desc">10,000 jugadores atrapados en un mundo virtual de supervivencia. Morir en el juego significa una descarga letal en la vida real.</p>
+        <span class="hero-tag">SISTEMA CARDENAL ACTIVO</span>
+        <h1 class="hero-title">El Legado del FullDive</h1>
+        <p class="hero-desc" style="font-size: 1.2rem; color: #cbd5e1; max-width: 800px; line-height: 1.6;">
+          Desde la tragedia del castillo flotante de hierro hasta la simulación de almas en el Underworld. Explora la evolución de la tecnología de inmersión total creada por Akihiko Kayaba.
+        </p>
       </div>
 
       <div class="timeline-grid">
         <article class="arc-card">
-          <div class="arc-year">ARCO 01</div>
-          <h3>Aincrad</h3>
-          <p>La lucha por despejar los 100 pisos del castillo flotante.</p>
+          <div style="color: var(--accent-cyan); font-family: 'Orbitron'; font-size: 0.85rem; margin-bottom: 10px;">AÑO 2022</div>
+          <h3 style="font-family: 'Orbitron'; font-size: 1.4rem; color: #fff; margin-bottom: 15px;">Sword Art Online</h3>
+          <p>Un juego mortal de supervivencia de 100 pisos. Sin magia, puramente basado en habilidades de espada (Sword Skills). 10,000 atrapados, la muerte virtual significaba la muerte real provocada por el NerveGear.</p>
         </article>
+        
         <article class="arc-card">
-          <div class="arc-year">ARCO 02</div>
-          <h3>Gun Gale Online</h3>
-          <p>La investigación del tirador Death Gun en un juego de combate militar con armas balísticas.</p>
+          <div style="color: var(--accent-cyan); font-family: 'Orbitron'; font-size: 0.85rem; margin-bottom: 10px;">AÑO 2025</div>
+          <h3 style="font-family: 'Orbitron'; font-size: 1.4rem; color: #fff; margin-bottom: 15px;">ALfheim Online</h3>
+          <p>Un VRMMO de fantasía basado en la mitología nórdica. Introdujo el vuelo sin restricciones y un sistema complejo de magia basado en 9 razas feéricas compitiendo por llegar al Árbol del Mundo.</p>
         </article>
+        
         <article class="arc-card">
-          <div class="arc-year">ARCO 03</div>
-          <h3>Project Alicization</h3>
-          <p>La simulación de Underworld y el manejo de la fuerza de voluntad con el Incarnation System.</p>
+          <div style="color: var(--accent-cyan); font-family: 'Orbitron'; font-size: 0.85rem; margin-bottom: 10px;">AÑO 2025 (Finales)</div>
+          <h3 style="font-family: 'Orbitron'; font-size: 1.4rem; color: #fff; margin-bottom: 15px;">Gun Gale Online</h3>
+          <p>Un mundo oscuro enfocado en armas de fuego, balística y torneos competitivos (BoB). Introdujo el hardware AmuSphere como sucesor seguro del NerveGear.</p>
+        </article>
+
+        <article class="arc-card">
+          <div style="color: var(--accent-cyan); font-family: 'Orbitron'; font-size: 0.85rem; margin-bottom: 10px;">AÑO 2026</div>
+          <h3 style="font-family: 'Orbitron'; font-size: 1.4rem; color: #fff; margin-bottom: 15px;">Project Alicization</h3>
+          <p>Proyecto secreto del gobierno japonés (RATH) usando el Soul Translator. No genera NPCs, sino "Fluctlights" artificiales (almas humanas cuánticas) criadas desde cero en una simulación civilizatoria.</p>
         </article>
       </div>
     </section>
 
-    <!-- VIEW 2: PERSONAJES -->
-    <section id="view-characters" class="view-section active">
+    <section id="view-characters" class="view-section">
       <div class="section-header">
-        <h2>AVATARES PRINCIPALES</h2>
-        <p>Base de datos de combatientes registrados</p>
+        <h2>BASE DE DATOS DE AVATARES</h2>
+        <p>// REGISTROS EXTRAÍDOS DEL SISTEMA THE SEED //</p>
       </div>
 
-      <!-- CARDS CON FOTOS LOCALES -->
       <div class="characters-grid">
+        <!-- Kirito -->
         <div class="char-card">
           <div class="char-img-wrap">
-            <span class="char-badge">DPS / Solo</span>
-            <img src="img/kirito.jpg" alt="Kirito" onerror="this.src='https://upload.wikimedia.org/wikipedia/en/a/a2/Kirito_Sword_Art_Online.png'" />
+            <span class="char-badge">DPS / Dual Blades</span>
+            <img src="https://static.wikia.nocookie.net/sao/images/5/56/Doble_empu%C3%B1adura_Kirito.png/revision/latest?cb=20130107144520&path-prefix=es" alt="Kirito" onerror="this.src='https://images.alphacoders.com/605/thumb-1920-605586.jpg'" />
           </div>
           <div class="char-details">
             <div>
               <h3>Kirito</h3>
               <div class="char-role">The Black Swordsman</div>
-              <p class="char-lore">El héroe de Aincrad y portador de la técnica Dual Blades. Su control de encarnación en Underworld desafía los límites del sistema.</p>
+              <p class="char-lore">El Héroe de Aincrad y portador de la técnica única 'Doble Empuñadura'. Su inmensa velocidad de reacción y dominio de la Encarnación lo hacen una anomalía del sistema.</p>
             </div>
-            <div class="char-meta">Armas: <strong>Elucidator / Dark Repulser</strong></div>
+            <div class="char-meta">Arma Principal: <strong>Night Sky Sword / Elucidator</strong></div>
           </div>
         </div>
 
+        <!-- Asuna -->
         <div class="char-card">
           <div class="char-img-wrap">
-            <span class="char-badge">Líder de Asalto</span>
-            <img src="img/asuna.jpg" alt="Asuna" onerror="this.src='https://upload.wikimedia.org/wikipedia/en/8/87/Asuna_Sword_Art_Online.png'" />
+            <span class="char-badge">Líder / Rapier</span>
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQJLdW_k-LYTEj7E1JOLUAwbN1EV2GHJBfdH2q1diaLFJP1dC4n5e9HyRx&s=10" alt="Asuna" onerror="this.src='https://images7.alphacoders.com/336/thumb-1920-336712.jpg'" />
           </div>
           <div class="char-details">
             <div>
               <h3>Asuna</h3>
               <div class="char-role">The Flash / Goddess Stacia</div>
-              <p class="char-lore">Sublíder de los Caballeros de la Hermandad de la Sangre. Cuenta con velocidad extrema y la capacidad divina de manipular el terreno.</p>
+              <p class="char-lore">Antigua Sublíder de los Caballeros de la Hermandad de la Sangre. Su extrema velocidad con el estoque le otorgó el apodo de 'El Destello'.</p>
             </div>
-            <div class="char-meta">Arma: <strong>Lambent Light</strong></div>
+            <div class="char-meta">Arma Principal: <strong>Lambent Light / Radiant Light</strong></div>
           </div>
         </div>
 
+        <!-- Sinon -->
         <div class="char-card">
           <div class="char-img-wrap">
             <span class="char-badge">Francotirador</span>
-            <img src="img/sinon.jpg" alt="Sinon" onerror="this.src='https://upload.wikimedia.org/wikipedia/en/3/36/Sinon_Phantom_Bullet.png'" />
+            <img src="https://static.wikia.nocookie.net/sao/images/b/b0/Sinon_GGO.png/revision/latest?cb=20161205014726&path-prefix=es" alt="Sinon" onerror="this.src='https://images5.alphacoders.com/565/thumb-1920-565814.jpg'" />
           </div>
           <div class="char-details">
             <div>
               <h3>Sinon</h3>
-              <div class="char-role">Sniper Élite / Goddess Solus</div>
-              <p class="char-lore">Tiradora letal a largas distancias. Bajo la identidad de Solus obtiene vuelo táctico y disparos térmicos destructivos.</p>
+              <div class="char-role">Hecate Sniper / Goddess Solus</div>
+              <p class="char-lore">Leyenda en Gun Gale Online. Como la Diosa Solus en Underworld, tiene la capacidad de vuelo ilimitado y un arco que dispara rayos de aniquilación.</p>
             </div>
-            <div class="char-meta">Arma: <strong>PGM Ultima Ratio Hecate II</strong></div>
+            <div class="char-meta">Arma Principal: <strong>PGM Ultima Ratio Hecate II</strong></div>
           </div>
         </div>
 
+        <!-- Alice -->
         <div class="char-card">
           <div class="char-img-wrap">
-            <span class="char-badge">Caballero</span>
-            <img src="img/eugeo.jpg" alt="Eugeo" onerror="this.src='https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800&auto=format&fit=crop&q=80'" />
+            <span class="char-badge">Caballero de la Integridad</span>
+            <img src="https://static.wikia.nocookie.net/sao/images/7/75/Alice_anime.png/revision/latest?cb=20191014051208&path-prefix=es" alt="Alice" onerror="this.src='https://images.unsplash.com/photo-1614082242765-7c98ca0f3df3?w=800&q=80'" />
+          </div>
+          <div class="char-details">
+            <div>
+              <h3>Alice Zuberg</h3>
+              <div class="char-role">Alice Synthesis Thirty</div>
+              <p class="char-lore">Inteligencia Artificial (A.L.I.C.E.) y el Caballero de la Integridad más formidable. Su voluntad es tan fuerte que logró romper el Sello del Ojo Derecho.</p>
+            </div>
+            <div class="char-meta">Arma Principal: <strong>Fragrant Olive Sword</strong></div>
+          </div>
+        </div>
+
+        <!-- Eugeo -->
+        <div class="char-card">
+          <div class="char-img-wrap">
+            <span class="char-badge">Control de Hielo</span>
+            <img src="https://i.pinimg.com/736x/b1/69/3a/b1693aaf7c0bb2311c412122432f4498.jpg" alt="Eugeo" onerror="this.src='https://images.alphacoders.com/100/thumb-1920-1002930.png'" />
           </div>
           <div class="char-details">
             <div>
               <h3>Eugeo</h3>
               <div class="char-role">Underworld Swordsman</div>
-              <p class="char-lore">Espadachín de Norlangarth instruido en el estilo Aincrad. Capaz de desatar congelamiento masivo con la Blue Rose Sword.</p>
+              <p class="char-lore">El mejor amigo de Kirito. Su espada divina tiene el poder de liberar un arte de control de armamento que congela masivamente y drena la vida del entorno.</p>
             </div>
-            <div class="char-meta">Arma: <strong>Blue Rose Sword</strong></div>
+            <div class="char-meta">Arma Principal: <strong>Blue Rose Sword</strong></div>
+          </div>
+        </div>
+
+        <!-- Leafa -->
+        <div class="char-card">
+          <div class="char-img-wrap">
+            <span class="char-badge">Guerrera Mágica</span>
+            <img src="https://i.pinimg.com/736x/bf/19/67/bf196759e375625cc40d454a71548193.jpg" alt="Leafa" onerror="this.src='https://images.unsplash.com/photo-1542382257-80ddcb28b248?w=800&q=80'" />
+          </div>
+          <div class="char-details">
+            <div>
+              <h3>Leafa</h3>
+              <div class="char-role">Sylph Warrior / Goddess Terraria</div>
+              <p class="char-lore">Hermana de Kirito (Suguha). Experta en kendo en la vida real, se traduce como una espadachina rápida y curandera letal de la raza Sylph en ALO.</p>
+            </div>
+            <div class="char-meta">Arma Principal: <strong>Sylph Blade</strong></div>
+          </div>
+        </div>
+
+        <!-- Klein -->
+        <div class="char-card">
+          <div class="char-img-wrap">
+            <span class="char-badge">Samurái / Fuego</span>
+            <img src="https://static.wikia.nocookie.net/sao/images/a/a2/Apariencia_Klein_SAO_2.png/revision/latest?cb=20141214171844&path-prefix=es" alt="Klein" onerror="this.src='https://images.unsplash.com/photo-1577457788931-c0a76ce12338?w=800&q=80'" />
+          </div>
+          <div class="char-details">
+            <div>
+              <h3>Klein</h3>
+              <div class="char-role">Salamander / Fuurinkazan Leader</div>
+              <p class="char-lore">El primer amigo que Kirito hizo en Aincrad. Un jugador leal y líder del gremio Fuurinkazan. Utiliza katanas y magia de fuego pesado en ALO.</p>
+            </div>
+            <div class="char-meta">Arma Principal: <strong>Karakurenai (Katana)</strong></div>
           </div>
         </div>
       </div>
+    </section>
 
-      <!-- SECCIÓN STREAMLIT CON IA INTEGRADA ABAJO -->
-      <div class="streamlit-wrapper">
-        <iframe src="http://localhost:8501/?embed=true"></iframe>
+    <section id="view-analysis" class="view-section">
+      <div class="section-header">
+        <h2>MÓDULOS DE ANÁLISIS</h2>
+        <p>// MHCP-001 Y DASHBOARD DE ESTADÍSTICAS //</p>
+      </div>
+
+      <div class="analysis-layout">
+        
+        <!-- Yui AI Chat -->
+        <div class="cyber-terminal ai-container">
+          <div class="terminal-header">
+            <div class="term-dots">
+              <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+            </div>
+            <div class="term-title">YUI_MHCP001.exe</div>
+          </div>
+
+          <div class="chat-messages" id="chat-messages">
+            <div class="message msg-ai">
+              ¡Hola! Soy Yui, tu programa de navegación y salud mental del sistema The Seed. 🧚‍♀️<br><br>
+              Pregúntame sobre cualquier jugador, arma, piso de Aincrad o línea de tiempo del universo de Sword Art Online. ¡Estoy aquí para ayudarte!
+            </div>
+          </div>
+          
+          <div class="typing-indicator" id="typing-indicator">Analizando bases de datos...</div>
+
+          <div class="chat-input-area">
+            <input type="text" id="chat-input" class="chat-input" placeholder="Ej: ¿Qué hace la Blue Rose Sword?" onkeypress="handleKeyPress(event)" />
+            <button class="chat-send-btn" onclick="sendMessage()">ENVIAR</button>
+          </div>
+        </div>
+
+        <!-- Streamlit Iframe Wrapper -->
+        <div class="cyber-terminal streamlit-wrapper">
+          <div class="terminal-header">
+            <div class="term-dots">
+              <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+            </div>
+            <div class="term-title">STREAMLIT_ANALYSIS_DASHBOARD.exe</div>
+          </div>
+          
+          <!-- Mensaje de ayuda si el servidor está apagado (queda detrás del iframe si carga con fondo) -->
+          <div class="offline-help">
+            <h4>¿El módulo no carga?</h4>
+            <p>Este panel busca conectarse a tu servidor local de Streamlit. Para que funcione, abre la terminal en tu computadora y ejecuta:</p>
+            <code>streamlit run app.py</code>
+            <p style="margin-top: 1rem; font-size: 0.85rem;">(Asegúrate de que corra en el puerto 8501)</p>
+          </div>
+
+          <!-- Iframe apuntando al localhost con los 1100px definidos en el CSS -->
+          <iframe src="http://localhost:8501/?embed=true"></iframe>
+        </div>
+
       </div>
     </section>
 
   </main>
 
   <script>
+    // --- CAMBIO DE PESTAÑAS FLUIDO ---
     function switchView(viewName) {
-      document.querySelectorAll('.view-section').forEach(view => view.classList.remove('active'));
-      document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.view-section').forEach(view => {
+        view.classList.remove('active');
+      });
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
 
       const target = document.getElementById(`view-${viewName}`);
-      if (target) target.classList.add('active');
+      if (target) {
+        // Reiniciar animación re-aplicando la clase
+        target.style.animation = 'none';
+        target.offsetHeight; /* trigger reflow */
+        target.style.animation = null; 
+        target.classList.add('active');
+      }
 
       const activeBtn = Array.from(document.querySelectorAll('.nav-btn')).find(b => 
         b.getAttribute('onclick').includes(viewName)
       );
       if (activeBtn) activeBtn.classList.add('active');
+    }
+
+    // --- LÓGICA DEL CHATBOT AI (GEMINI) ---
+    // NOTA: La API Key se inyectará si dejas esto vacío en este entorno, o debes poner la tuya.
+    const apiKey = ""; 
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+    const systemPrompt = `Eres Yui, el Programa de Consejería de Salud Mental (MHCP001) del universo de Sword Art Online. 
+    Actúas como una Pixie de Navegación dulce, inteligente y servicial. Tienes un tono cariñoso y tecnológico a la vez.
+    
+    REGLA ESTRICTA: SOLO puedes responder preguntas relacionadas con el lore, historia, juegos (Aincrad, ALO, GGO, Underworld), personajes (Kirito, Asuna, Sinon, Alice, Eugeo, etc.), armas, y estadísticas del universo de Sword Art Online.
+    Si te preguntan otra cosa (vida real, otras series), responde amablemente que tu acceso a The Seed solo abarca datos de SAO.`;
+
+    let chatHistory = [];
+
+    function handleKeyPress(event) {
+      if (event.key === 'Enter') {
+        sendMessage();
+      }
+    }
+
+    function formatTextToHTML(text) {
+        return text.replace(/\*\*(.*?)\*\*/g, '<strong style="color: var(--accent-cyan);">$1</strong>').replace(/\n/g, '<br>');
+    }
+
+    async function sendMessage() {
+      const inputEl = document.getElementById('chat-input');
+      const text = inputEl.value.trim();
+      if (!text) return;
+
+      inputEl.value = '';
+      addMessageToUI(text, 'user');
+
+      const typingIndicator = document.getElementById('typing-indicator');
+      typingIndicator.style.display = 'block';
+      scrollToBottom();
+
+      chatHistory.push({ role: "user", parts: [{ text: text }] });
+
+      const payload = {
+          contents: chatHistory,
+          systemInstruction: { parts: [{ text: systemPrompt }] }
+      };
+
+      try {
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+        typingIndicator.style.display = 'none';
+
+        if (result.candidates && result.candidates[0] && result.candidates[0].content) {
+            let aiText = result.candidates[0].content.parts[0].text;
+            addMessageToUI(aiText, 'ai');
+            chatHistory.push({ role: "model", parts: [{ text: aiText }] });
+        } else {
+            addMessageToUI("Error de red de El Cardenal. Datos inaccesibles.", 'ai');
+        }
+
+      } catch (error) {
+        typingIndicator.style.display = 'none';
+        console.error("Error API:", error);
+        addMessageToUI("Conexión con The Seed interrumpida. Intenta nuevamente.", 'ai');
+        chatHistory.pop();
+      }
+    }
+
+    function addMessageToUI(text, sender) {
+      const messagesContainer = document.getElementById('chat-messages');
+      const msgDiv = document.createElement('div');
+      
+      msgDiv.classList.add('message');
+      msgDiv.classList.add(sender === 'user' ? 'msg-user' : 'msg-ai');
+      msgDiv.innerHTML = formatTextToHTML(text);
+      
+      messagesContainer.appendChild(msgDiv);
+      scrollToBottom();
+    }
+
+    function scrollToBottom() {
+      const messagesContainer = document.getElementById('chat-messages');
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
   </script>
 </body>
